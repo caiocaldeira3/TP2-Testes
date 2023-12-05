@@ -3,10 +3,10 @@ name: Generate Code Coverage
 on:
   push:
     branches:
-      - main  # Altere para o nome da sua branch principal, se necessário
+      - main
   pull_request:
     branches:
-      - main  # Altere para a branch principal, se necessário
+      - main
 
 jobs:
   coverage:
@@ -31,8 +31,9 @@ jobs:
           python -m pytest --cov=book_service --cov=book --cov-report term tests/
           coverage xml -o coverage.xml
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v2
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
-          name: coverage-report
-          path: coverage.xml  # Substitua pelo caminho correto do seu arquivo de cobertura
+          file: coverage.xml
